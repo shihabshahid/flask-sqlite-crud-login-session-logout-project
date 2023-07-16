@@ -10,7 +10,7 @@ def login():
         password = request.form['password']
         con=sql.connect("user_db.db")
         cur=con.cursor()
-        cur.execute("select name,password from admin where name=? and password=?",(name,password))
+        cur.execute("select name,password from admin where name=? and password=?",[name,password])
         data=cur.fetchone()
         if data is not None:
             session['name']=name
@@ -47,7 +47,7 @@ def create():
             contact=request.form['contact']
             con=sql.connect("user_db.db")
             cur=con.cursor()
-            cur.execute("insert into user_table(name,contact) values(?,?)",(name,contact))
+            cur.execute("insert into user_table(name,contact) values(?,?)",[name,contact])
             con.commit()
             flash('Data Saved','success')
             return redirect(url_for("retrieve"))
@@ -62,14 +62,14 @@ def update(id):
         con=sql.connect("user_db.db")
         con.row_factory=sql.Row
         cur=con.cursor()
-        cur.execute("select * from user_table where id=?",(id))
+        cur.execute("select * from user_table where id=?",[id])
         data=cur.fetchone()
         if request.method=='POST':
             name=request.form['name']
             contact=request.form['contact']
             con=sql.connect("user_db.db")
             cur=con.cursor()
-            cur.execute("update user_table set name=?,contact=? where id=?",(name,contact,id))
+            cur.execute("update user_table set name=?,contact=? where id=?",[name,contact,id])
             con.commit()
             flash('Data updated','success')
             return redirect(url_for("retrieve"))
@@ -84,7 +84,7 @@ def delete(id):
         con=sql.connect("user_db.db")
         con.row_factory=sql.Row
         cur=con.cursor()
-        cur.execute("delete from user_table where id=?",(id))
+        cur.execute("delete from user_table where id=?",[id])
         con.commit()
         flash('Data Deleted','warning')
         return redirect(url_for("retrieve"))
